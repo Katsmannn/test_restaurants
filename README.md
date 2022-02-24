@@ -14,6 +14,7 @@ pip install -r requirements.txt
 ```
 Выполнить миграции:  
 ```
+cd restaurants
 python manage.py makemigrations
 python manage.py migrate
 ```
@@ -24,6 +25,10 @@ python manage.py company
 При необходимости создать суперпользователя:
 ```
 python manage.py createsuperuser
+```
+Запустить сервер отладки:
+```
+python manage.py runserver
 ```
   
 ## Использование приложения
