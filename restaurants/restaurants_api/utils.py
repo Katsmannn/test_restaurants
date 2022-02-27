@@ -1,12 +1,17 @@
 import requests
 
+from .exceptions import NoRestaurantData
+
 
 def get_restaurant_list(url):
     '''
     Получение списка ресторанов с ресурса url.
     '''
-    restaurant_list = requests.get(url).json()
-    return restaurant_list
+    try:
+        restaurant_list = requests.get(url)
+    except requests.exceptions.RequestException:
+        return
+    return restaurant_list.json()
 
 
 def parse_kfc(restaurant_list):
@@ -21,7 +26,11 @@ def parse_kfc(restaurant_list):
     '''
 
     result = []
-    kfc = restaurant_list['searchResults']
+    kfc = restaurant_list.get('searchResults')
+    if kfc is None:
+        raise NoRestaurantData(
+            'Отсутствует информация о ресторанах KFC'
+        )
     for restaurant in kfc:
         restaurant_data = restaurant['storePublic']
         restaurant_contacts = restaurant_data['contacts']
@@ -55,7 +64,11 @@ def parse_mcdolalds(restaurant_list):
     '''
 
     result = []
-    md = restaurant_list['restaurants']
+    md = restaurant_list.get('restaurants')
+    if md is None:
+        raise NoRestaurantData(
+            'Отсутствует информация о ресторанах McDonalds'
+        )
     for restaurant in md:
         restaurant_location = restaurant['location']
         name = restaurant_location['code']
@@ -85,7 +98,11 @@ def parse_burger_king(restaurant_list):
     '''
 
     result = []
-    bk = restaurant_list['items']
+    bk = restaurant_list.get('items')
+    if bk is None:
+        raise NoRestaurantData(
+            'Отсутствует информация о ресторанах Burger King'
+        )
     for restaurant in bk:
         name = restaurant['name']
         latitude = restaurant['latitude']
