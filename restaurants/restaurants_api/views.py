@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from geopy import distance
 
-from data.parameters import KFC_URL, BK_URL, MD_URL
+from data.parameters import KFC_URL, BK_URL, MD_URL, DISTANCE
 from .utils import (
     get_restaurant_list,
     parse_burger_king,
@@ -18,7 +18,7 @@ from .models import Restaurant, Company
 @api_view(['POST'])
 def database_update(request):
     '''
-    Получение данных о ресторанах с соответсвущих URL,
+    Получение данных о ресторанах с соответствущих URL,
     запись информации в базу данных.
     '''
 
@@ -58,7 +58,6 @@ def get_restaurants_list(request):
 
     DELTA_LATITUDE = 0.0224
     DELTA_LONGITUDE = 0.125
-    DISTANCE = 2.0
 
     result = []
     bk_list = Restaurant.objects.filter(company__name='Burger King')
